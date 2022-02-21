@@ -1,0 +1,104 @@
+include<iostream>
+#include<fstream>
+#include<math.h>
+using namespace std;
+fstream f("sorted.txt",ios::out);
+fstream f1("f1.txt",ios::out);
+fstream f2("f2.txt",ios::out);
+size_t siz = 0;
+void Natural_Sort(fstream &s) {
+  int x1,x, y,xstart;
+  while (!s.eof()) {
+  s >> xstart;
+  siz++;
+  f << xstart<< " ";
+  }
+  unsigned int current_pos;
+  size_t s_length;
+  size_t index_f1,index_f2;
+  size_t i = 0;
+  s_length = pow(2, i);
+  while (s_length < siz) {
+    current_pos = 0;
+    f.close();
+    f.open("sorted.txt", ios::in);
+    while (current_pos < siz) {
+      f >> x1;
+      if ((current_pos / s_length) % 2 == 0) {
+        f1 << x1 << " ";
+      }
+      else {
+        f2 << x1 << " ";
+      }
+      current_pos++;
+    }
+    f1.close();
+    f2.close();
+    f1.open("f1.txt", ios::in);
+    f2.open("f2.txt", ios::in);
+    f.close();
+    f.open("sorted.txt", ios::out);
+    index_f1 = 0;
+    index_f2 = 0;
+    while (!f1.eof() and !f2.eof()) {
+    
+    f1 >> x;
+    f2 >> y;
+    while (index_f1 < s_length and index_f2 < s_length and !f1.eof() and !f2.eof()) {
+      if (f1.eof() or f2.eof()) break;
+      if (x < y) {
+        f << x << " ";
+        if (index_f1 != s_length - 1)
+          f1 >> x;
+        index_f1++;
+        }
+      else {
+        f << y << " ";
+        if (index_f2 != s_length - 1)
+          f2 >> y;
+        index_f2++;
+        }
+    }
+    while (index_f1 < s_length) {
+      if (f1.eof()) break;
+        f << x << " ";
+      if (index_f1 != s_length - 1)
+        f1 >> x;
+      index_f1++;
+    }
+    while (index_f2 < s_length) {
+      if (f2.eof()) { break; }
+      f << y << " ";
+      if (index_f2 != s_length - 1)
+        f2 >> y;
+      index_f2++;
+    
+    }
+    index_f1 = 0;
+    index_f2 = 0;
+    }
+  while (!f1.eof()) {
+    f1 >> x;
+    if (f1.eof()) break;
+    f << x;
+  }
+  while (!f2.eof()) {  
+    f2 >> y;
+    if (f2.eof()) break;
+    f << y;
+  }
+  i++;
+  s_length = pow(2, i);
+  f1.close();
+  f1.open("f1.txt", ios::out);
+  f2.close();
+  f2.open("f2.txt", ios::out);
+  
+  }
+  
+}  
+int main() {
+  fstream s("main.txt");
+  Natural_Sort(s);
+  return 0;
+}
